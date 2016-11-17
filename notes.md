@@ -156,3 +156,126 @@ var owlCat = (
 **ACHTUNG** lowercase for HTML, such as ``ònmouseover```, camelCase for JSX, such as ``onMouseOver```.
 
 The event Listener value should be a function.
+
+### Conditionals
+
+``ìf```statement is not allowed in JSX. There's some workaround :
+
+#### Conditional outside
+
+Set the conditional **outside** of the JSX element :
+
+```javascript
+if (condition == true) {
+  var myJSX = (
+    <h1>
+      Hey it's True!
+    </h1>
+  );
+} else {
+  var myJSX = (
+    <h1>
+      Ooooh it's false.
+    </h1>
+  );
+}
+```
+
+#### Ternary Operator
+
+It's the same as an is/else statement, but in one line :
+
+```javascript
+userIsYoungerThan21 ? serveGrapeJuice() : serveWine();```
+```
+
+They can be chained :
+
+```javascript
+var k = a ? (b ? (c ? d : e) : (d ? e : f)) : f ? (g ? h : i) : j;
+```
+
+And this **can** be used inside a JSX element.
+
+#### && operator
+
+Can be used to make somehting, or nothing :
+
+```javascript
+var doesHeLikeIt = (
+	{ age > 15 && <p>Brussels Sprouts</p>}
+);
+
+// is interpreted as :
+// if (age is superior as 15) is true, and (<p>...</p>) is true (it's always true...), then use it !
+
+### .map in JSX
+
+If I want to creat a list of JSX elements, I can use an Array or *not* :
+
+```javascript
+// This is fine
+var listNormal = (
+	<ui>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+</ui>
+);
+
+//This is also fine!
+var list = [
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+];
+var listWithArray = <ul>{list}</ul>;
+```
+
+.map iterate through an array and can return a new array :
+
+```javascript
+var array = ['1', '2', '3'];
+
+var numbersInList = array.map(function(num){
+	return <li>{num}</li>
+});
+```
+
+### Keys
+
+A ```key```is a JSX attribute, used like this :
+
+```JSX
+<ul>
+  <li key="li-1">Example1</li>
+  <li key="li-2">Example2</li>
+  <li key="li-3">Example3</li>
+</ul>
+```
+
+React use ```keys```internally to keep track of lists and which items have been added, changed or removed. In some case it's important to use them to help React behave right. Especially, I must use ```keys```if :
+
+- The list-items have *memory* from one render to the next, like a check-box list.
+- The list order mught be shuffled.
+
+There is several way to assign a key. One would be :
+
+```javascript
+var people = ['toi', 'moi', 'lui'];
+
+var peopleArray = people.map(function(person, i){
+	return <li key={'person_'+i}>{person}</li>
+});
+```
+
+### React.createElement()
+
+React compiler transform JSX into the method .creatElement(). If I want, I can use directly this method to create elements :
+
+```javasicript
+React.createElement(
+"h1",
+null,
+"Hello, World")
+```
