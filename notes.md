@@ -59,7 +59,7 @@ var myList = (
 
 ## Render a JSX element
 
-I can use '.render(JSX, container)` to render *JSX* inside the *container*
+I can use `.render(JSX, container)` to render *JSX* inside the *container*
 
 ```javascript
 var React = require('react');
@@ -88,7 +88,7 @@ will be rendered as :
 
 In HTML, the end-slash is optional :
 
-```<br>``` works as good as ```<br />```
+`<br>` works as good as `<br />`
 
 in JSX, the **end-slash is required** :
 
@@ -101,7 +101,7 @@ in JSX, the **end-slash is required** :
 
 ### include Javascript inside JSX
 
-Use curly braces marker```{}``` to inject javascript inside JSX. Eg :
+Use curly braces marker `{}` to inject javascript inside JSX. Eg :
 
 ```javascript
 var math = <h1>2+3 = {2+3}</h1>;
@@ -153,13 +153,13 @@ var owlCat = (
 
 [list of valid events Listeners in React](https://facebook.github.io/react/docs/events.html#supported-events)
 
-**ACHTUNG** lowercase for HTML, such as ``ònmouseover```, camelCase for JSX, such as ``onMouseOver```.
+**ACHTUNG** lowercase for HTML, such as `onmouseover`, camelCase for JSX, such as `onMouseOver`.
 
 The event Listener value should be a function.
 
 ### Conditionals
 
-``ìf```statement is not allowed in JSX. There's some workaround :
+`if` statement is not allowed in JSX. There's some workaround :
 
 #### Conditional outside
 
@@ -169,13 +169,13 @@ Set the conditional **outside** of the JSX element :
 if (condition == true) {
   var myJSX = (
     <h1>
-      Hey it's True!
+      Hey it is True!
     </h1>
   );
 } else {
   var myJSX = (
     <h1>
-      Ooooh it's false.
+      Ooooh it is False.
     </h1>
   );
 }
@@ -210,6 +210,7 @@ var doesHeLikeIt = (
 // if (age is superior as 15) is true, and (<p>...</p>) is true (it's always true...), then use it !
 
 ### .map in JSX
+```
 
 If I want to creat a list of JSX elements, I can use an Array or *not* :
 
@@ -254,7 +255,7 @@ A ```key```is a JSX attribute, used like this :
 </ul>
 ```
 
-React use ```keys```internally to keep track of lists and which items have been added, changed or removed. In some case it's important to use them to help React behave right. Especially, I must use ```keys```if :
+React use `keys` internally to keep track of lists and which items have been added, changed or removed. In some case it's important to use them to help React behave right. Especially, I must use `keys` if :
 
 - The list-items have *memory* from one render to the next, like a check-box list.
 - The list order mught be shuffled.
