@@ -14,7 +14,7 @@ JSX is a **syntax extension** for JavaScript : can't be read by Browser, should 
 
 Looks a lot like an HTML element.
 
-```JSX
+```jsx
 <h1>Hello World</h1>
 ```
 
@@ -22,14 +22,14 @@ It's a javascipt expression, so it can go in a variable, passed to a function, s
 
 ```javascript
 const toDo = {
-	first
+  first
 }
 ```
 
 JSX elements can have **attribute**, just like HTML elements:
 
 
-```JSX
+```jsx
 <h1 id="title">Hello World</h1>
 ```
 
@@ -37,23 +37,23 @@ if multiple lines, JSX elements must be wrapped in several lines with a parenthe
 
 will **not** work :
 
-```JSX
+```javascript
 var myList = (
-	<li>Learn React</li>
-	<li>Make a great app</li>
-	<li>Be hired</li>
+  <li>Learn React</li>
+  <li>Make a great app</li>
+  <li>Be hired</li>
 );
 ```
 
 will work :
 
-```JSX
+```javascript
 var myList = (
-	<ol>
-		<li>Learn React</li>
-		<li>Make a great app</li>
-		<li>Be hired</li>
-	</ol>
+  <ol>
+    <li>Learn React</li>
+    <li>Make a great app</li>
+    <li>Be hired</li>
+  </ol>
 );
 ```
 
@@ -74,13 +74,13 @@ ReactDOM.render(<h1>Hello world</h1>, document.getElementById('app'));
 
 `class` is a reserved word in javascript. Therefore I **can't** use it in a JSX element. I have to use instead `className` that will be rendered as `class`. EG :
 
-```JSX
+```jsx
 <div className="myDiv">hey!</div>
 ```
 
 will be rendered as :
 
-```JSX
+```jsx
 <div class="myDiv">hey!</div>
 ```
 
@@ -92,7 +92,7 @@ In HTML, the end-slash is optional :
 
 in JSX, the **end-slash is required** :
 
-```JSX
+```jsx
 // Works :
 <br />
 // Doesn't works :
@@ -203,32 +203,32 @@ Can be used to make somehting, or nothing :
 
 ```javascript
 var doesHeLikeIt = (
-	{ age > 15 && <p>Brussels Sprouts</p>}
+  { age > 15 && <p>Brussels Sprouts</p>}
 );
 
 // is interpreted as :
 // if (age is superior as 15) is true, and (<p>...</p>) is true (it's always true...), then use it !
+```
 
 ### .map in JSX
-```
 
 If I want to creat a list of JSX elements, I can use an Array or *not* :
 
 ```javascript
 // This is fine
 var listNormal = (
-	<ui>
-		<li>1</li>
-		<li>2</li>
-		<li>3</li>
+  <ui>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
 </ui>
 );
 
 //This is also fine!
 var list = [
-			<li>1</li>
-			<li>2</li>
-			<li>3</li>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
 ];
 var listWithArray = <ul>{list}</ul>;
 ```
@@ -239,7 +239,7 @@ var listWithArray = <ul>{list}</ul>;
 var array = ['1', '2', '3'];
 
 var numbersInList = array.map(function(num){
-	return <li>{num}</li>
+  return <li>{num}</li>
 });
 ```
 
@@ -247,7 +247,7 @@ var numbersInList = array.map(function(num){
 
 A ```key```is a JSX attribute, used like this :
 
-```JSX
+```jsx
 <ul>
   <li key="li-1">Example1</li>
   <li key="li-2">Example2</li>
@@ -266,7 +266,7 @@ There is several way to assign a key. One would be :
 var people = ['toi', 'moi', 'lui'];
 
 var peopleArray = people.map(function(person, i){
-	return <li key={'person_'+i}>{person}</li>
+  return <li key={'person_'+i}>{person}</li>
 });
 ```
 
@@ -274,9 +274,50 @@ var peopleArray = people.map(function(person, i){
 
 React compiler transform JSX into the method .creatElement(). If I want, I can use directly this method to create elements :
 
-```javasicript
+```javascript
 React.createElement(
 "h1",
 null,
 "Hello, World")
+```
+
+# React Components
+
+## Intro to Components
+
+### Component Class
+
+```javascript
+var MyComponentClass = React.createClass({
+  render: function () {
+    return <h1>Hello world</h1>
+  }
+  });
+```
+
+- `var MyComponentClass = React.createClass()` create a new component class and store it in a new variable. Use *UpperCamelCase* for the class name.
+
+- `.creatClass()` takes an *object* as argument. This object **must** include at least a *render function* : a property whose name is `render` and whose value is a *function*.
+
+- A render function **must** have a `return` statement (usually a JSX expression).
+
+### Component Instance
+
+Create a component instance by writing a JSX element with the component class name as tag :
+
+```jsx
+<MyComponentClass />
+```
+
+JSX elements can be either HTML-like, or component instance. To make the difference, JSX use the first letter capitalisation of the tag :
+
+`<myDiv />` is an **HTML-like** JSX element
+`<MyDiv />` is an **component** instance JSX element
+
+### Render Component
+
+I can render the component instance the same way as JSX expression :
+
+```javascript
+ReactDOM.render(<MyComponentClass />, document.getElementById('app'));
 ```
