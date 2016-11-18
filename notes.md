@@ -292,7 +292,7 @@ var MyComponentClass = React.createClass({
   render: function () {
     return <h1>Hello world</h1>
   }
-  });
+});
 ```
 
 - `var MyComponentClass = React.createClass()` create a new component class and store it in a new variable. Use *UpperCamelCase* for the class name.
@@ -320,4 +320,66 @@ I can render the component instance the same way as JSX expression :
 
 ```javascript
 ReactDOM.render(<MyComponentClass />, document.getElementById('app'));
+```
+
+##Component and JSX together
+
+###Use Variable attribute
+
+I can create an object and use it's properties inside a JXS :
+
+```javascript
+var itIsMe = {
+  name: 'Camille',
+  trasportation: 'bike',
+  favoriteReciepe: 'suchis'
+}
+
+var myJSX = ( // I also could create a Class here
+  <div>
+    <h1>{itIsMe.name}</h1>
+    <p>i like {itIsMe.transportation} and {itIsMe.favoriteReciepe}</p>
+  </div>
+  )
+```
+
+### Put logic in a render founction
+
+In a render function, I can use logical operators, comparaison, statements... 
+The logic should be before the return statelment :
+
+```javascript
+var numbers = { 1: "un",
+                2: "deux"
+                3: "trois"}
+
+render: function(){
+  var num = numbers[0];
+  return <div>{num]</div>;
+```
+
+```javascript
+render: function(){
+  var plan;
+  if (fiftyFifty){
+    plan = "up";
+  }else{
+    plan = "down";
+  }
+  return <div>{plan]</div>;
+```
+
+I should be carefull to put the statement **inside** the function, and **before** the render
+
+### this
+
+[Reminder about *this*](http://www.digital-web.com/articles/scope_in_javascript/)
+
+```javascript
+var MyName = React.createClass({
+  name: "camille",
+  render: function () {
+    return <h1>My name is {this.name}.</h1>;
+  }
+});
 ```
