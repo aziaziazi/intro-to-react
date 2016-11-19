@@ -383,3 +383,56 @@ var MyName = React.createClass({
   }
 });
 ```
+
+## Component rendering component
+
+Each component is usually small on it's own. I combine them to form comlpex ecosystems of informations
+
+React is spacial in the ways in which components interact.
+
+### Basic Rendering
+
+```javascript
+var OMG = React.createClass({
+  render: function () {
+    return <h1>Whooaa!</h1>;
+  }
+});
+
+var Crazy = React.createClass({
+  render: function () {
+    return <OMG />;
+  }
+});
+```
+
+### Imports
+
+[Why Module System is important](http://eloquentjavascript.net/10_modules.html)
+
+[React's Module System comes from Node.js](http://fredkschott.com/post/2014/06/require-and-the-module-system/)
+
+#### Import a whole file
+
+Start the path with `.` or `/` to let know javascript where giving a path.
+
+```javascript
+var MyModule = require('/path-to-module.js') // .js is faculative
+```
+
+#### Import a Class
+
+I usually don't want to import a whole file, but just the Component Class.
+
+I must first export the required module in his file.
+[module.exports in Node.js](https://www.sitepoint.com/understanding-module-exports-exports-node-js/)
+
+```javascript
+var OMG = React.createClass({
+  render: function () {
+    return <h1>Whooaa!</h1>;
+  }
+});
+
+module.exports = OMG;
+```
