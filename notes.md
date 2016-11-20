@@ -436,3 +436,191 @@ var OMG = React.createClass({
 
 module.exports = OMG;
 ```
+
+## **props.** : Components Interacting 
+
+A **`props`** is an object that hold information about a component. Every components got one. I can use `props` to pass information from a component to another one.
+
+**prop** : Each piece of info passed-in
+**props** : All the pieces of infos passed-in OR the objects that holds those infos.
+
+### Basics
+
+#### Pass
+
+I can *pass information* to a React component by giving that component an *attribute*. For a string, use *Quotation marks*. Use *curly brackets* for anything else : object, array, integer...
+
+```javascript
+// Pass a String
+<MyComponent foo="bar"/>
+
+// Pass an Integer
+<MyComponent foo={1234}/>
+
+// Pass an Array
+<MyComponent foo={["this", "is", "not", "super", "secret"]}/>
+```
+
+I also can pass several arguments :
+
+```javascript
+<MyComponent name="Cam" eyes={2} girlfriend="Kim"/>
+```
+
+#### Access
+
+To access the whole objects.props : `this.props`. If I want a string : `JSON.stringify(this.props)`.
+
+To access a specific value : `this.props.name`.
+
+```javascript
+render: function () {
+    var data = this.props.data;
+    return <h1>Hi there, {this.props.other-data}!</h1>;
+}
+```
+
+### From Component to Component
+
+1. In Greeting.js, export Greeting Class with `module.exports`
+2. In App.js, import Greeting Class with `require()`
+3. In App.js, create and *instance* of Greeting and give it an *attribute* with `<Greeting attribue="value"/>`
+4. In Greeting.js, use that *prop* (the attribute) with `{this.prop.attribute}`
+
+```javascript
+// Greeting.js
+var Greeting = React.createClass({
+  render: function () {
+    return <h2>Hi there, {this.props.name}!</h2>; // prop use to display it's value
+});
+
+module.exports = Greeting;
+
+// App.js
+var Greeting = require('./Greeting');
+
+var App = React.createClass({
+  render: function () {
+    return (
+        <h1>This is my App!</h1>
+        <Greeting name="Camille"/>
+      );
+});
+```
+
+I also can use props to make decisions :
+
+```javascript
+var Welcome = React.createClass({
+  render: function () {
+    if (this.props.language == 'Deutsch') { // prop use as a condition
+      return (
+        <h2>
+          Hallo ! i spreache nicht deutsch, enschuldigung
+        </h2>
+      );
+    } else {
+      return (
+        <h2>
+          Wwelcoooome!!
+        </h2>
+      );
+    }
+  }
+});
+```
+
+### Passing an event Handler
+
+I also can pass functions as *props* ! And thoses function can be events handling. Here's how to bind the function to the event :
+
+1. In Talker.js, Create the function handling the event. The convention for naming is : "handle" + event type >> `handleClick`
+2. In Talker.js, pass the function handling the event to the instance created. Use `this.` to refer to it. The conviention for naming the prop is : "on" + event type >> `onClick`
+3. In Button.js, bind the prop to the html event handler
+
+```javascript
+// Talker.js
+var Talker = React.createClass({
+  handleClick: function () {
+    // Here any processing I want
+    alert(blaaah);
+  },
+  
+  render: function () {
+    return <Button onClick={this.handleClick}/>;
+  }
+});
+
+// Button.js
+var Button = React.createClass({
+  render: function () {
+    return <button onClick={this.props.onClick}>ClickMe</button>;
+  }
+});
+```
+
+### this.props.**children**
+
+When I declare a component, I can use self closing tag OR not :
+
+```javascript
+<MyComponent />
+// is equal to :
+<MyComponent>
+</MyComponent>
+```
+
+`this.props.children` will return everything in beetween a component's opening and closing tag. If there's several elements, an array is returned.
+
+```javascript
+// App.js
+var App = React.createClass({
+  render: function () {
+    return (
+        <List type='Living Cat Musician'> // Instance creation
+          <li>Nora the Piano Cat</li>     // Children of thi instance
+        </List>
+    );
+  }
+});
+
+// List.js
+var List = React.createClass({
+  render: function () {
+    var titleText = 'Favorite ' + this.props.type;
+  }
+    return (
+      <div>
+        <h1>{titleText}</h1>
+        <ul>{this.props.children}</ul>    // Call to the children >
+      </div>
+    );
+  }
+});
+```
+
+### getDefaultProps
+
+I can set default props to fallback. To that, I have to make a function `getDefaultProps` and return inside it an object with the default properties I want : 
+
+```javascript
+var Top = React.createClass({
+  getDefaultProps: function(){
+    return {title: "default title yeah!",
+            text : "default text ooooh!"};
+  },
+  
+  render: function () {
+    return (
+      <h1>{this.props.title}</h1>
+      <p>{this.props.text}</p>
+    );
+  }
+});
+
+ReactDOM.render(
+  <Top />, // If 'title' or 'text' are passed, default values will be overided
+  document.getElementById('app')
+);
+```
+
