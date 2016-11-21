@@ -624,3 +624,70 @@ ReactDOM.render(
 );
 ```
 
+## **state.** : Store dynamic informations
+
+*Dynamic information* is an information that can change. Eg : a component displaying a game's score. There are two ways for a component to get dynamic information : `props`to and `state`. 
+
+### InitialState
+
+To make a component have a state, I have to write a `getInitialState` funtcion :
+
+```javascript
+var Example = React.createClass({
+  getInitialState: function () {
+    return { mood: 'decent' };
+  },
+
+  render: function () {
+    return <div></div>;
+  }
+});
+
+<Example />
+```
+
+### Read state
+
+Use that expression to read a component state :
+
+```javascript
+{this.state.name-of-property}
+```
+
+### Update state
+
+Use `this.setState` to change the state of a component. The most cummon way to call `this.setState` is to call a custom function that wraps it : 
+
+```javascript
+  addAMuffin: function () {
+    this.setState({ muffinsNb: muffinsNb += 1 });
+  },
+```
+
+Also, any time I call `this.setState`, `render()` is called as soon as the state has changed. Therefore I **can't** call `this.state` inside a render function, otherwise I would creat an infinite loop.
+
+```javascript
+var Toggle = React.createClass({
+  
+  getInitialState: function(){
+    return { color: green }
+  },
+  
+  changeColor: function(){
+    var newColor = this.state.color == green ? yellow : green;
+    this.setState({ color: newColor });
+  },
+  
+  render: function () {
+    return (
+      <div style={{background:this.state.color}}>
+        <button onClick={this.changeColor}>
+          Change color
+        </button>
+      </div>
+    );
+  }
+});
+```
+
+
