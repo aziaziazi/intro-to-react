@@ -1,3 +1,5 @@
+TODO: Add summary
+
 # Intro
 
 React JS is a Javascript library developed by engineers at Facebook.
@@ -437,7 +439,7 @@ var OMG = React.createClass({
 module.exports = OMG;
 ```
 
-## **props.** : Components Interacting 
+## props. : Components Interacting 
 
 A **`props`** is an object that hold information about a component. Every components got one. I can use `props` to pass information from a component to another one.
 
@@ -559,7 +561,7 @@ var Button = React.createClass({
 });
 ```
 
-### this.props.**children**
+### this.props.children
 
 When I declare a component, I can use self closing tag OR not :
 
@@ -624,7 +626,7 @@ ReactDOM.render(
 );
 ```
 
-## **state.** : Store dynamic informations
+## state. : Store dynamic informations
 
 *Dynamic information* is an information that can change. Eg : a component displaying a game's score. There are two ways for a component to get dynamic information : `props`to and `state`. 
 
@@ -690,4 +692,34 @@ var Toggle = React.createClass({
 });
 ```
 
+# Programming patterns
 
+I should use `props` to store information that can only be changed by a different component.
+I should use `state` to store infomration that can be change by the component itself.
+
+## Stateless Components Inherit From Stateful Components
+
+A **Stateful** component is a component that as a `getInitialState` function.
+A **Stateless** component is a component that doesn't.
+
+```javascript
+//Child.js : Use of props because it doesn't change it itsel.
+var Child = React.createClass({
+  render: function(){
+    return <h1>Hey, my name is {this.props.name}!</h1>;
+  }
+})
+
+//Parent.js : Create a state that can change, and pass it to Child's prop.
+var Parent = React.createClass({
+  getInitialState: function(){
+    return { name: 'Frarthur' }
+  },
+  
+  render: function(){
+    return <Child name={this.state.name}/>;
+  }
+})
+```
+
+## Child Components Update Their Parents' state
