@@ -1044,3 +1044,37 @@ function MyComponentClass (props) {
 }
 ```
 
+## PropTypes
+
+I use PropTypes to define... my props' types !  They are usefull for two reasons :
+
+- *Documentation* : they help the reader to *undersand* what the component expect (and the component itself) 
+- *Validation* : if `props` are missing or aren't what's expected, a warning will print in the console
+
+Two ways to declare propsTypes :
+
+```javascript
+// In a Component Class
+var Runner = React.createClass({
+  propTypes: {
+    message:   React.PropTypes.string.isRequired
+  }
+
+  // render : function () {...}
+```
+
+```javascript
+// In a Stateless Functional Component
+
+// function GuineaPigs (props) {...}
+
+GuineaPigs.propTypes = {
+  src: React.PropTypes.string.isRequired
+}
+```
+
+ACHTUNG : be careful to the capitalization : `propTypes` to declare the object, `.PropTypes` to initialize each props.
+
+Below the types I can use `string`, `object`, `bool`, `number`, `func` or `array`.
+`isRequire` can be added.
+
