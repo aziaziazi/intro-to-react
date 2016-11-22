@@ -936,7 +936,7 @@ var Component = React.createClass({
 
 I should **always separate** the components that handle the presentation and the components that does the calculs.
 
-- Presentations Components contains **only JSX**
+- Presentations Components contains the **JSX**. They contain only one function : the `render` function (see next chapter)
 - Container Components contains **everythink but no JSX**
 
 To have my folders neat, I can create one folder for (presentation) **Components** and one folder **Containers** (Components).
@@ -993,3 +993,54 @@ var GuineaPigsContainer = React.createClass({
   }
 });
 ```
+
+## Stateless Functional Components
+
+When I separate the *container component* from the* presentational component*, the presentational component always end up having only one render function and no other properties.
+
+There's a different way I can write them, using a single javascript function. A component like this ,*written as a function* is called **stateless functional component** :
+
+```javascript
+// A component class written in the usual way:
+var MyComponentClass = React.createClass({
+  render: function(){
+    return <h1>Hello world</h1>;
+  }
+});
+
+// The same component class, written as a stateless functional component:
+function MyComponentClass () {
+  return <h1>Hello world</h1>;
+}
+```
+
+**To pass a prop**, I just have to pass the `props` object as a paramater :
+
+```javascript
+// Normal way to display a prop:
+var MyComponentClass = React.createClass({
+  render: function () {
+    return <h1>{this.props.title}</h1>;
+  }
+});
+
+// Stateless functional component way to display a prop:
+function MyComponentClass (props) {
+  return <h1>{props.title}</h1>;
+}
+
+// Normal way to display a prop using a variable:
+var MyComponentClass = React.createClass({
+  render: function () {
+    var title = this.props.title;
+    return <h1>{title}</h1>;
+  }
+});
+
+// Stateless functional component way to display a prop using a variable:
+function MyComponentClass (props) {
+  var title = props.title;
+  return <h1>{title}</h1>;
+}
+```
+
