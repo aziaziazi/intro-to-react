@@ -580,7 +580,7 @@ var App = React.createClass({
   render: function () {
     return (
         <List type='Living Cat Musician'> // Instance creation
-          <li>Nora the Piano Cat</li>     // Children of thi instance
+          <li>Nora the Piano Cat</li>     // Children of this instance
         </List>
     );
   }
@@ -697,13 +697,15 @@ var Toggle = React.createClass({
 I should use `props` to store information that can only be changed by a different component.
 I should use `state` to store infomration that can be change by the component itself.
 
-## Stateless Components Inherit From Stateful Components
-
 A **Stateful** component is a component that as a `getInitialState` function.
 A **Stateless** component is a component that doesn't.
 
+## Stateless Components Inherit From Stateful Components
+
+Passing info from a stateful Parent to a stateless Child:
+
 ```javascript
-//Child.js : Use of props because it doesn't change it itsel.
+//Child.js : Use of props because it doesn't change it itself.
 var Child = React.createClass({
   render: function(){
     return <h1>Hey, my name is {this.props.name}!</h1>;
@@ -723,3 +725,134 @@ var Parent = React.createClass({
 ```
 
 ## Child Components Update Their Parents' state
+
+### Parent pass a state changing function to Child
+
+1. Create getInitialState of what I want to change : `name`
+2. Render a Child and pass him the `name` state as a prop
+3. Define a `changeName` function to change the state
+4. Pass `changeName` to the Child by a prop
+
+```javascript
+//Parent
+var Parent = React.createClass({
+  getInitialState: function () {
+    return { name: 'Frarthur' };          // 1
+  },
+  
+  changeName: function(newName){
+    this.setState({ name: newName });     // 3
+  },
+
+  render: function () {
+    return (
+      <Child
+        name={this.state.name}            // 2
+        onChange={this.changeName}/>      // 4
+    );
+  }
+});
+```
+
+### Child update Parent state
+
+1. Create an event listener in the rendered JSX.
+...If the Parent's function doesn't need an argument, I can directly pass it here! Hoever I want to pass the dropdown menu's value, so :
+2. Call an handling function, passing the event `(e)` and
+3. Create the `handlingFunction(e)` that  extract the value I need and
+4. pass it to the parent's function !
+
+```javascript
+//Child
+var Child = React.createClass({
+  handleChange:function(e){               // 3
+    var name = e.target.value;
+    
+    this.props.onChange(name)           // 4
+  },
+  
+  render: function () {
+    return (
+      <div>
+        <h1> Hey my name is {this.props.name}! </h1>
+                                          // 1 //2
+        <select onChange={this.handleChange} id="great-names">
+          <option value="Frarthur"> Frarthur </option>
+          <option value="Gromulus"> Gromulus </option>
+          <option value="Thinkpiece"> Thinkpiece </option>
+        </select>
+      </div>
+    );
+  }
+```
+
+[Auto-binding](https://facebook.github.io/react/blog/2013/07/02/react-v0-4-autobind-by-default.html);
+
+## Child Components Update Their Siblings' props
+
+I want every component have only one purpose. The last Child exemple has two : diplaying a `prop` and change it. I should split it in two component : *Child* to change the `prop` and *Sibling* to display it. There's still the 
+*Parent* component that store the value :
+
+```javascript
+// Parent
+var Parent = React.createClass({
+  getInitialState: function () {
+    return { name: 'Frarthur' };
+  },
+  
+  changeName: function (newName) {
+    this.setState({
+      name: newName
+    });
+  },
+
+  render: function () {
+    return (
+      <div>
+        <Child onChange={this.changeName} />
+        <Sibling name={this.state.name} />
+      </div>
+    );
+  }
+});
+
+// Child
+var Child = React.createClass({
+  handleChange: function (e) {
+    var name = e.target.value;
+    this.props.onChange(name);
+  },
+  
+  render: function () {
+    return (
+      <div>
+        <select 
+          id="great-names" 
+          onChange={this.handleChange}>
+          
+          <option value="Frarthur">Frarthur</option>
+          <option value="Gromulus">Gromulus</option>
+          <option value="Thinkpiece">Thinkpiece</option>
+        </select>
+      </div>
+    );
+  }
+});
+
+// Sibling
+var Sibling = React.createClass({
+  render: function () {
+    var name = this.props.name;
+    return (
+      <div>
+        <h1>Hey, my name is {name}!</h1>
+        <h2>Dont you think {name} is the prettiest name ever?</h2>
+        <h2>Sure am glad that my parents picked {name}!</h2>
+      </div>
+    );
+  }
+});
+
+```
+
+For a reminder of each step : [Codecademy review](https://www.codecademy.com/courses/react-102/lessons/child-updates-sibling/exercises/stateless-inherit-stateful-recap)
