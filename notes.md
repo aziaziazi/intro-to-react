@@ -1075,6 +1075,6 @@ GuineaPigs.propTypes = {
 
 ACHTUNG : be careful to the capitalization : `propTypes` to declare the object, `.PropTypes` to initialize each props.
 
-Below the types I can use `string`, `object`, `bool`, `number`, `func` or `array`.
+The types I can use: `string`, `object`, `bool`, `number`, `func` or `array`.
 `isRequire` can be added.
 
