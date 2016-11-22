@@ -692,7 +692,7 @@ var Toggle = React.createClass({
 });
 ```
 
-# Programming patterns
+# Programming pattern : Stateful and Stateless components
 
 I should use `props` to store information that can only be changed by a different component.
 I should use `state` to store infomration that can be change by the component itself.
@@ -856,3 +856,78 @@ var Sibling = React.createClass({
 ```
 
 For a reminder of each step : [Codecademy review](https://www.codecademy.com/courses/react-102/lessons/child-updates-sibling/exercises/stateless-inherit-stateful-recap)
+
+# Advenced React
+
+## Inline Styles
+
+There are many ways to use styles in React. Here I'll learn *inline* styles, which is a style written as an *attribute*:
+
+```javascript
+<h1 style={{ color: 'Red'}} >Hello World</h1>
+```
+
+Here I have to use double curly braces :
+- one for injecting Javascript into JSX
+- one for creating a javascript object literal
+
+### Create a style object
+
+however if I have many styles it's often nicer to store the style object in a variable  and pass it to the JSX. In this case, only one curly braces is suffisant :
+
+```javascript
+var styles = {
+  background: 'lightblue',
+  color:      'darkred'
+};
+
+var styleMe = <h1 style={styles}>Please style me</h1>;
+```
+
+### Names & Values writting
+
+In javascipt, style names are written in hyphenated-lowercase like `margin-top`. In React, I should use camelCase:
+
+```javascript
+var styles = { 
+  marginTop:        '20px',
+  backgroundColor:  'green'
+};
+```
+
+In javascirpt, style value are almost always `"strings"`, even for numbers with units. In React it's the same but I also can write *numbers* and it will assume the unit `px`:
+
+```javascript
+{ fontSize : 30 }
+// is equal to
+{ fontSize: "30px" }
+```
+
+### Reuse
+
+Keep the styles in a separate javascript file to reuse them. Export via `module.export` and import with `require()` :
+
+```javascript
+// colorPalette
+var lightBlue = 'rgb(223, 227, 238)';
+var grey      = 'rgb(247, 247, 247)';
+
+module.exports = {
+  lightBlue: lightBlue,
+  grey: grey
+};
+
+// Component
+var styles = require('./colorPalette');
+
+var divStyle = {
+  backgroundColor:  styles.grey,
+  color:            styles.lightBlue
+}
+
+var Component = React.createClass({
+  render: function() {
+    return <div style={ divStyle } />
+  }
+});
+```
