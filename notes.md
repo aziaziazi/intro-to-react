@@ -903,7 +903,7 @@ In javascirpt, style value are almost always `"strings"`, even for numbers with 
 { fontSize: "30px" }
 ```
 
-### Reuse
+### Re-use
 
 Keep the styles in a separate javascript file to reuse them. Export via `module.export` and import with `require()` :
 
@@ -928,6 +928,68 @@ var divStyle = {
 var Component = React.createClass({
   render: function() {
     return <div style={ divStyle } />
+  }
+});
+```
+
+## Seprataing Container Components From Presentational Components
+
+I should **always separate** the components that handle the presentation and the components that does the calculs.
+
+- Presentations Components contains **only JSX**
+- Container Components contains **everythink but no JSX**
+
+To have my folders neat, I can create one folder for (presentation) **Components** and one folder **Containers** (Components).
+
+```javascript
+// Components/GuineaPigs.js
+var GuineaPigs = React.createClass({
+  render: function () {
+    var src = this.props.src;
+    return (
+      <div>
+        <h1>Cute Guinea Pigs</h1>
+        <img src={src} />
+      </div>
+    );
+  }
+});
+```
+
+```javascript
+// Containers/GuineaPigsComponent.js
+var GUINEAPATHS = [
+  'https://s3.amazonaws.com/codecademy-content/courses/React/react_photo-guineapig-1.jpg',
+  'https://s3.amazonaws.com/codecademy-content/courses/React/react_photo-guineapig-2.jpg',
+  'https://s3.amazonaws.com/codecademy-content/courses/React/react_photo-guineapig-3.jpg'
+];
+
+var GuineaPigsContainer = React.createClass({
+  getInitialState: function () {
+    return { currentGP: 0 };
+  },
+
+  nextGP: function () {
+    var current = this.state.currentGP;
+    var next = ++current % GUINEAPATHS.length;
+    this.setState({ currentGP: next });
+  },
+
+  interval: null,
+
+  componentDidMount: function () {
+    this.interval = setInterval(this.nextGP, 200);
+  },
+
+  componentWillUnmount: function () {
+    clearInterval(this.interval);
+  },
+
+  render: function () {
+    var src = GUINEAPATHS[this.state.currentGP];
+    return (
+      <GuineaPigs src={src} />
+    );
   }
 });
 ```
