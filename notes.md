@@ -626,11 +626,11 @@ ReactDOM.render(
 );
 ```
 
-## state. : Store dynamic informations
+# state. : Store dynamic informations
 
 *Dynamic information* is an information that can change. Eg : a component displaying a game's score. There are two ways for a component to get dynamic information : `props`to and `state`. 
 
-### InitialState
+## InitialState
 
 To make a component have a state, I have to write a `getInitialState` funtcion :
 
@@ -648,7 +648,7 @@ var Example = React.createClass({
 <Example />
 ```
 
-### Read state
+## Read state
 
 Use that expression to read a component state :
 
@@ -656,7 +656,7 @@ Use that expression to read a component state :
 {this.state.name-of-property}
 ```
 
-### Update state
+## Update state
 
 Use `this.setState` to change the state of a component. The most cummon way to call `this.setState` is to call a custom function that wraps it : 
 
@@ -1119,3 +1119,59 @@ Since I have the value stored as state, I can send it to the server anytime I wa
 **Controlled Components** doesn't store any state by themselfes and I can control their states through `props`.
 
 **Uncontrolled Components** keep tracks of their states by themselfes. Eg : `<input />` knows what's his state and i can query it anytime. In React, when i give an `<input />` a `value` attribute, it becomes *controlled* and stops using his internal storage. This is a more *React* way os doing thinks, but there's workarounds if I want to work with uncontrolled components. [Official documentation here](https://facebook.github.io/react/docs/forms.html)
+
+# Lifecycle Methods
+
+*Lifecycle Methods* are methods that get called automatically at certains moments in a component's life. There's three lyfecycle methods categories :
+
+- mounting
+- updating
+- unmounting
+
+## Mounting Lifecycle Methods
+
+A component *mount* when it renders for the first time. When it mount, it calls three mounting lifecycle methods in this order :
+
+- `componentWillMount`
+...Get called the first time the component is mounted, before `render` started.
+- `render`
+...Is the well known and required function in a component class
+- `componentDidMount`
+...Get called the first time the component is mounted, after `render` finished.
+... It!s here that I usually want to make AJAX call, connect to web APIs or JavaScript frameworks.
+
+I call them like this : 
+
+```javascript
+var Flashy = React.createClass({
+  componentWillMount: function () {
+    alert('FOR THE FIRST TIME EVER...  FLASHY!!!!');
+  },
+
+  componentDidMount: function () {
+    alert('JUST SAW THE DEBUT OF...  FLASHY!!!!!!!');
+  },
+  
+  render: function () {
+    alert('Flashy is rendering!');
+    
+    return (
+      <h1 style={{ color: this.props.color }}>
+        OOH LA LA LOOK AT ME I AM THE FLASHIEST
+      </h1>
+    );
+  }
+});
+```
+
+At first munting ( `ReactDOM.render()`), here's what happening :
+
+1. `alert('FOR THE FIRST TIME EVER...  FLASHY!!!!)`
+2. `alert('Flashy is rendering!')`
+3. Rendering
+4. `alert('JUST SAW THE DEBUT OF...  FLASHY!!!!!!!')`
+
+At nexts renderings :
+
+1. `alert('Flashy is rendering!')`
+2. Rendering
