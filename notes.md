@@ -1078,3 +1078,44 @@ ACHTUNG : be careful to the capitalization : `propTypes` to declare the object, 
 The types I can use: `string`, `object`, `bool`, `number`, `func` or `array`.
 `isRequire` can be added.
 
+## Forms
+
+In React form, I want the server to know every changes, new character or deletion. For doing that, I keep track of my form through a state :
+
+1. Give `<input />` an `onChange` attribute with value equal to `{this.handleUserInput}`
+2. Create `handleUserInput` function that `setState` the `userInput` equal to the event targeted value.
+3. Create the `getInitialState` function for `userInput`
+4. Use `{this.state.userInput}` anywhere I want in the component !
+ 
+
+```javascript
+var Input = React.createClass({
+  getInitialState: function () {          // 3
+    return { userInput: '' }
+  },
+  
+  handleUserInput: function (e) {         // 2
+    this.setState({
+      userInput: e.target.value
+    })
+  },
+  
+  render: function () {
+    return (
+      <div>
+        <input
+          onChange={this.handleUserInput} // 1
+          value={this.state.userInput}    //4
+          type="text" />
+        <h1>{this.state.userInput}</h1>   // 4
+      </div>
+    );
+  }
+});
+```
+
+Since I have the value stored as state, I can send it to the server anytime I want and I don't need `<form>`. I still can use it if I want a submit button to differenciant in-progress form and finished form.
+
+**Controlled Components** doesn't store any state by themselfes and I can control their states through `props`.
+
+**Uncontrolled Components** keep tracks of their states by themselfes. Eg : `<input />` knows what's his state and i can query it anytime. In React, when i give an `<input />` a `value` attribute, it becomes *controlled* and stops using his internal storage. This is a more *React* way os doing thinks, but there's workarounds if I want to work with uncontrolled components. [Official documentation here](https://facebook.github.io/react/docs/forms.html)
