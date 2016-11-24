@@ -1133,14 +1133,14 @@ Since I have the value stored as state, I can send it to the server anytime I wa
 A component *mount* when it renders for the first time. When it mount, it calls three mounting lifecycle methods in this order :
 
 - `componentWillMount`
-...Get called the first time the component is mounted, before `render` started.
+..Get called the first time the component is mounted, before `render` started.
 - `render`
-...Is the well known and required function in a component class
+..Is the well known and required function in a component class
 - `componentDidMount`
-...Get called the first time the component is mounted, after `render` finished.
-... It!s here that I usually want to make AJAX call, connect to web APIs or JavaScript frameworks.
+..Get called the first time the component is mounted, after `render` finished.
+..It's here that I usually want to **make AJAX call**, **connect to web APIs** or **JavaScript frameworks**.
 
-I call them like this : 
+I call them like that : 
 
 ```javascript
 var Flashy = React.createClass({
@@ -1164,14 +1164,175 @@ var Flashy = React.createClass({
 });
 ```
 
-At first munting ( `ReactDOM.render()`), here's what happening :
+At first munting of the component ( `ReactDOM.render()` called for the first time), here's what happening :
 
-1. `alert('FOR THE FIRST TIME EVER...  FLASHY!!!!)`
-2. `alert('Flashy is rendering!')`
-3. Rendering
-4. `alert('JUST SAW THE DEBUT OF...  FLASHY!!!!!!!')`
+1. componentWillMount > `alert('FOR THE FIRST TIME EVER...  FLASHY!!!!)`
+2. render > `alert('Flashy is rendering!')` + return() and *Rendering*
+3. componentDidMount > `alert('JUST SAW THE DEBUT OF...  FLASHY!!!!!!!')`
 
 At nexts renderings :
 
-1. `alert('Flashy is rendering!')`
-2. Rendering
+1. render > `alert('Flashy is rendering!')` + return() and *Rendering*
+
+## Updating Lifecycle Methods
+
+A component *update* everytimes that it renders, starting with the second render (the first time, it *mount*). When it updates, it calls the mounting lifecycle methods in this order :
+
+- `componentWillReceiveProps`
+..Get called only if the component will receive `props`. It automatically get passed one argument : `nextProps`. It's an object that is a preview of the upcoming `props`.
+- `shouldComponentUpdate(nextProps, nextState)`
+..It should return either:..
+..- If `true` the process continue as normal.
+..- If `false` the process stops here and none of the below lifecycle methods will be called, including `render`
+..It automatically receive two arguments : `nextProps` and `nextState`. It's typical to compare them to `this.props` and `this.state` to decide what to do. (see exemple bellow).
+- `componentWillUpdate(nextProps, nextState)`
+..I can't call `this.setState` here.
+..Here, I usually want to do non-React things, like checking the `window` size or on interacting with an API.
+- `render`
+- `componentDidUpdate(nextProps, nextState)`
+..Similar to `componentWill Update` but get called after `render`: no `this.setState` and good for non-React and APIs
+
+```javascript
+var Example = React.createClass({
+  getInitialState: function () {
+    return { subtext: 'Put me in an <h2> please.' };
+  },
+  
+  componentWillReceiveProps: function (nextProps) {
+      alert("Check out the new props.text that I'm about to get:  "
+      + nextProps.text);
+    },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    if ((this.props.text == nextProps.text) && 
+      (this.state.subtext == nextState.subtext)) {
+      alert("Props and state haven't changed, so I'm not gonna update!");
+      return false;
+    } else {
+      alert("Okay fine I will update.")
+      return true;
+    }
+  },
+
+  componentWillUpdate: function (nextProps, nextState) {
+    alert('Component is about to update!  Any second now!');
+  },
+
+  componentDidUpdate: function () {
+    alert('Component is done rendering!');
+  },
+
+  render: function () {
+    return (
+      <div>
+        <h1>{this.props.text}</h1>
+        <h2>{this.state.subtext}</h2>
+      </div>
+    );
+  }
+});
+```
+
+## Unmounting Lifecycle Methods
+
+A component *unmount* when it is removed from the DOM. That happend if the DOM is rendered without the component, if the user navigates to a different website or if he close the browser.
+
+There's only one lifecycle methos : `componentWillUnmount(prevProps, )`. It gets called right before the component is removed from the DOM.
+
+```javascript
+// Enthoused.js
+// var React = require('react');
+
+var Enthused = React.createClass({
+  interval: null,
+
+  componentDidMount: function () {
+    this.interval = setInterval(function(){
+      this.props.addText('!');
+    }.bind(this), 15);
+  },
+
+  componentWillUnmount (prevProps, prevState) {
+    clearInterval(this.interval);
+  },
+  
+  render: function () {
+    return (
+      <button onClick={this.props.toggle}>
+        Stop!
+      </button>
+    );
+  }
+});
+// module.exports = Enthused;
+
+// App.js
+// var React = require('react');
+// var ReactDOM = require('react-dom');
+// var Enthused = require('./Enthused');
+
+var App = React.createClass({
+  getInitialState: function () {
+    return {
+      enthused: false,
+      text: ''
+    };
+  },
+
+  toggleEnthusiasm: function () {
+    this.setState({
+      enthused: !this.state.enthused
+    });
+  },
+
+  setText: function (text) {
+    this.setState({ text: text });
+  },
+
+  addText: function (newText) {
+    var text = this.state.text + newText;
+    this.setState({ text: text });
+  },
+
+  handleChange: function (e) {
+    this.setText(e.target.value);
+  },
+
+  render: function () {
+    var button;
+    if (this.state.enthused) {
+      button = (
+        <Enthused 
+          toggle={this.toggleEnthusiasm}
+          addText={this.addText} />
+      );
+    } else {
+      button = (
+        <button 
+          onClick={this.toggleEnthusiasm}>
+          Add Enthusiasm!
+        </button>
+      );
+    }
+
+    return (
+      <div>
+        <h1>Auto-Enthusiasm</h1>
+        <textarea 
+          rows="7"
+          cols="40"
+          value={this.state.text}
+          onChange={this.handleChange}>
+        </textarea>
+        {button}
+        <h2>{this.state.text}</h2>
+      </div>
+    );
+  }
+});
+
+// ReactDOM.render(
+//  <App />, 
+//   document.getElementById('app')
+// );
+```
