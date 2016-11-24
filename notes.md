@@ -1336,3 +1336,11 @@ var App = React.createClass({
 //   document.getElementById('app')
 // );
 ```
+
+# Next course
+
+Next Codecademy course comming :
+
+```
+Stay tuned for our intermediate-level React course, Building an Interactive React Application. Instead of learning more new tools, you will be focused on applying the tools that you have already learned. How many components should an app have? Which components should use props, and which should use state? Who should pass what information to whom? These are the kinds of structural questions that we will address in Building an Interactive React Application.
+```
